@@ -46,6 +46,7 @@ import ChinhSach3 from '../components/chinhsach/Chinhsach3.jsx'
 import ChinhSach4 from '../components/chinhsach/Chinhsach4.jsx'
 
 import A from "../clientPages/payment/ProductDetail_test";
+import Sample from "../components/Sample.jsx";
 import DetailSanPham from "../components/sanpham/DetailSanPham.jsx";
 
 const ProtectedRoute = ({ children }) => {
@@ -96,10 +97,11 @@ function RouterRoot() {
         {/* public route */}
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+        <Route path="sample" element={<Sample />} />
 
         {/* Client routes */}
         <Route path="/" element={<ClientLayout />}>
-          <Route index element={<Navigate to="trang-chu" replace />} />
+          <Route index element={<Navigate to="sample" replace />} />
           <Route path="trang-chu" element={<Home />} />
           <Route path="tin-tuc" element={<PostCategory />} />
           <Route path="tin-tuc/:cat/:slug/:id" element={<PostClientDetail />} />
