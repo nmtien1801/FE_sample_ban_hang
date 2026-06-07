@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://cmicstudio.vn/trang-chu</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://cmicstudio.vn/gioi-thieu</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cmicstudio.vn/dich-vu</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cmicstudio.vn/tin-tuc</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cmicstudio.vn/tuyen-dung</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cmicstudio.vn/lien-he</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://cmicstudio.vn/dich-vu/set-up-phong-livestream</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cmicstudio.vn/dich-vu/phan-mem-auto-tone</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://cmicstudio.vn/ten-san-pham-slug/id-danh-muc/id-san-pham</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://cmicstudio.vn/tin-tuc/tieu-de-bai-viet-viet-lien/1</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://cmicstudio.vn/tuyen-dung/tieu-de-cong-viec/1</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>0.6</priority>
+  </url>
+</urlset>
