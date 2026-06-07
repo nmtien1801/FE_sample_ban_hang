@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
-// Chuyển đổi mảng thành Object để quản lý href tương ứng cho từng item
 const NAV_LINKS = [
   { label: "Trang chủ", path: "/" },
   { label: "Giới thiệu", path: "/gioi-thieu" },
-  { label: "Bộ sưu tập", path: "/bo-suu-tap" },
+  { label: "Sản phẩm", path: "/san-pham" },
   { label: "Blog", path: "/tin-tuc" },
   { label: "Liên hệ", path: "/lien-he" }
 ];
@@ -28,26 +28,38 @@ export default function Header() {
             <p className="text-gray-400 text-[8px] tracking-[0.4em] uppercase -mt-0.5">Perfume & Luxury</p>
           </div>
 
-          {/* 2. Desktop Nav (Ứng với href của từng mục) */}
+          {/* 2. Desktop Nav (Sử dụng NavLink chống load lại trang) */}
           <nav className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((item, idx) => (
-              <a
+            {NAV_LINKS.map((item) => (
+              <NavLink
                 key={item.label}
-                href={item.path}
-                className={`text-gray-800 hover:text-[#b31f24] text-[12px] tracking-[0.15em] uppercase transition-colors duration-200 relative group font-body font-medium ${idx === 0 ? "text-[#b31f24]" : ""}`}
+                to={item.path}
+                // end đảm bảo trang chủ "/" không bị dính highlight lây khi vào các trang con
+                end={item.path === "/"} 
+                className={({ isActive }) =>
+                  `text-[12px] tracking-[0.15em] uppercase transition-colors duration-200 relative group font-body font-medium ${
+                    isActive ? "text-[#b31f24]" : "text-gray-800 hover:text-[#b31f24]"
+                  }`
+                }
               >
-                {item.label}
-                <span className={`absolute -bottom-1 left-0 h-[2px] bg-[#b31f24] transition-all duration-300 ${idx === 0 ? "w-full" : "w-0 group-hover:w-full"}`} />
-              </a>
+                {({ isActive }) => (
+                  <>
+                    {item.label}
+                    {/* Thanh gạch chân đỏ tự động xuất hiện hoặc kéo dài ra khi hover */}
+                    <span 
+                      className={`absolute -bottom-1 left-0 h-[2px] bg-[#b31f24] transition-all duration-300 ${
+                        isActive ? "w-full" : "w-0 group-hover:w-full"
+                      }`} 
+                    />
+                  </>
+                )}
+              </NavLink>
             ))}
           </nav>
 
           {/* 3. Cụm Chức Năng */}
           <div className="flex-1 flex items-center justify-end">
-
-            {/* Khung chức năng bo góc màu đỏ */}
             <div className="flex items-center gap-6 px-5 py-2.5 border border-[#b31f24] rounded-full bg-white text-[#b31f24]">
-
               {/* Icon Tìm kiếm */}
               <button className="hover:scale-105 transition-transform" title="Tìm kiếm">
                 <svg className="w-5 h-5 stroke-current" fill="none" strokeWidth={2} viewBox="0 0 24 24">
@@ -63,7 +75,7 @@ export default function Header() {
                 </svg>
               </button>
 
-              {/* Icon Giỏ hàng kèm Badge số 0 đỏ đậm */}
+              {/* Icon Giỏ hàng kèm Badge số 0 */}
               <button className="relative hover:scale-105 transition-transform" title="Giỏ hàng">
                 <svg className="w-5 h-5 stroke-current" fill="none" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
@@ -72,7 +84,6 @@ export default function Header() {
                   0
                 </span>
               </button>
-
             </div>
 
             {/* Nút Menu Mobile */}
@@ -84,20 +95,25 @@ export default function Header() {
               </svg>
             </button>
           </div>
-
         </div>
 
         {/* Mobile Menu */}
         {menuOpen && (
           <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4 shadow-inner">
-            {NAV_LINKS.map(item => (
-              <a 
+            {NAV_LINKS.map((item) => (
+              <NavLink 
                 key={item.label} 
-                href={item.path} 
-                className="text-gray-800 hover:text-[#b31f24] text-[12px] tracking-[0.15em] uppercase font-medium"
+                to={item.path} 
+                end={item.path === "/"}
+                onClick={() => setMenuOpen(false)} // Click xong tự đóng drawer menu
+                className={({ isActive }) =>
+                  `text-[12px] tracking-[0.15em] uppercase font-medium transition-colors ${
+                    isActive ? "text-[#b31f24] font-bold" : "text-gray-800"
+                  }`
+                }
               >
                 {item.label}
-              </a>
+              </NavLink>
             ))}
           </div>
         )}

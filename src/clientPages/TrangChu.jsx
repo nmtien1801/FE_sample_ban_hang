@@ -1,54 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { HERO_PRODUCTS, BRANDS, CATEGORIES, BLOG_POSTS, FEATURED_PRODUCTS , TESTIMONIALS  } from "./mockTravelData";
+import ProductCard from "../components/sanpham/cardSanPham.jsx";
 
 function StarRating({ stars }) {
   return (
     <div className="flex gap-0.5 text-amber-500 text-sm">
       {Array.from({ length: stars }).map((_, i) => <span key={i}>★</span>)}
-    </div>
-  );
-}
-
-function ProductCard({ product, featured = false }) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <div
-      className={`group relative bg-white border border-gray-200 overflow-hidden transition-all duration-500 ${featured ? "rounded-none" : "rounded-md"} ${hovered ? "border-[#b31f24] shadow-md" : ""}`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <div className="relative overflow-hidden aspect-[3/4] bg-gray-50">
-        <img
-          src={product.img}
-          alt={product.name}
-          className={`w-full h-full object-cover transition-transform duration-700 ${hovered ? "scale-105" : "scale-100"}`}
-        />
-        <div className={`absolute inset-0 bg-gradient-to-t from-black/40 via-transparent transition-opacity duration-300 ${hovered ? "opacity-100" : "opacity-30"}`} />
-        {product.badge && (
-          <div className="absolute top-3 left-3 bg-[#b31f24] text-white text-[10px] tracking-[0.15em] font-semibold px-2.5 py-1 uppercase rounded-sm">
-            {product.badge}
-          </div>
-        )}
-        {product.tag && (
-          <div className="absolute top-3 right-3 bg-[#b31f24] text-white text-[10px] tracking-[0.15em] font-semibold px-2 py-1 uppercase rounded-sm">
-            {product.tag}
-          </div>
-        )}
-        <div className={`absolute bottom-0 left-0 right-0 p-4 transition-all duration-300 ${hovered ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`}>
-          <button className="w-full bg-[#b31f24] hover:bg-[#91161a] text-white text-xs tracking-[0.15em] uppercase font-semibold py-2.5 transition-colors duration-200 rounded-sm">
-            Thêm vào giỏ
-          </button>
-        </div>
-      </div>
-      <div className="p-4 bg-white">
-        <p className="text-gray-400 text-[10px] tracking-[0.2em] uppercase mb-1">{product.brand}</p>
-        <h3 className="text-gray-900 font-sans font-bold text-base leading-tight mb-1 group-hover:text-[#b31f24] transition-colors">{product.name}</h3>
-        {product.note && <p className="text-gray-500 text-[11px] tracking-wide mb-3">{product.note}</p>}
-        <div className="flex items-center justify-between">
-          <span className="text-[#b31f24] font-medium text-base tracking-wide">{product.price}₫</span>
-          {product.size && <span className="text-gray-400 text-[10px] tracking-[0.1em]">{product.size}</span>}
-        </div>
-      </div>
     </div>
   );
 }

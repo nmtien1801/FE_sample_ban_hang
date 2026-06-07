@@ -32,6 +32,7 @@ import PostCategory from "../clientPages/DanhMucBaiViet.jsx";
 import PostClientDetail from "../clientPages/ChiTietBaiViet.jsx";
 import About from "../clientPages/GioiThieu.jsx";
 import Service from "../clientPages/dichVu/DichVu.jsx";
+import DanhSachSanPham from "../clientPages/DanhSachSanPham.jsx";
 import ServiceLive from "../clientPages/dichVu/DvLiveStream.jsx";
 import ServiceTone from "../clientPages/dichVu/DvAutoTone.jsx";
 import Contact from "../clientPages/LienHe.jsx";
@@ -101,16 +102,17 @@ function RouterRoot() {
           <Route path="trang-chu" element={<Home />} />
           <Route path="tin-tuc" element={<PostCategory />} />
           <Route path="tin-tuc/:cat/:slug/:id" element={<PostClientDetail />} />
-          <Route path="/tin-tuc/:name" element={<PostCategory />} /> 
           <Route path="gioi-thieu" element={<About />} />
+          <Route path="lien-he" element={<Contact />} />
 
           {/* path route: /product/ */}
           {/* <Route path="/product/:id_category/:id_product" element={<ProductPageHandler />} />  */}
           {/* <Route path="/:name/:id_category/:id_product" element={<ProductPageHandler />} /> */}
           <Route path="dich-vu" element={<Service />} />
+          <Route path="san-pham" element={<DanhSachSanPham />} />
           <Route path="dich-vu/set-up-phong-livestream" element={<ServiceLive />} />
           <Route path="dich-vu/phan-mem-auto-tone" element={<ServiceTone />} />
-          <Route path="lien-he" element={<Contact />} />
+
           <Route path="payment-momo" element={<PaymentMomoPage />} />
           <Route path="payment-vietqr" element={<PaymentVietQrPage />} />
 
