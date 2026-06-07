@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 
-const NAV_LINKS = ["Trang chủ", "Giới thiệu", "Bộ sưu tập" , "Blog", "Liên hệ"];
+// Chuyển đổi mảng thành Object để quản lý href tương ứng cho từng item
+const NAV_LINKS = [
+  { label: "Trang chủ", path: "/" },
+  { label: "Giới thiệu", path: "/gioi-thieu" },
+  { label: "Bộ sưu tập", path: "/bo-suu-tap" },
+  { label: "Blog", path: "/tin-tuc" },
+  { label: "Liên hệ", path: "/lien-he" }
+];
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <>
-      {/* ─── Announcement Bar (Giữ nguyên hoặc tùy biến theo tone đỏ) ─── */}
+      {/* ─── Announcement Bar ─── */}
       <div className="bg-[#b31f24] text-white text-center text-[11px] tracking-[0.25em] uppercase py-2 font-medium font-body relative z-[60]">
         &nbsp;·&nbsp; Hàng chính hãng 100% &nbsp;·&nbsp; 0967273063 &nbsp;·&nbsp; Giao hàng toàn quốc &nbsp;·&nbsp;
       </div>
@@ -21,21 +28,21 @@ export default function Header() {
             <p className="text-gray-400 text-[8px] tracking-[0.4em] uppercase -mt-0.5">Perfume & Luxury</p>
           </div>
 
-          {/* 2. Desktop Nav (Chuyển sang chữ tối màu) */}
+          {/* 2. Desktop Nav (Ứng với href của từng mục) */}
           <nav className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((link, idx) => (
+            {NAV_LINKS.map((item, idx) => (
               <a
-                key={link}
-                href="#"
+                key={item.label}
+                href={item.path}
                 className={`text-gray-800 hover:text-[#b31f24] text-[12px] tracking-[0.15em] uppercase transition-colors duration-200 relative group font-body font-medium ${idx === 0 ? "text-[#b31f24]" : ""}`}
               >
-                {link}
+                {item.label}
                 <span className={`absolute -bottom-1 left-0 h-[2px] bg-[#b31f24] transition-all duration-300 ${idx === 0 ? "w-full" : "w-0 group-hover:w-full"}`} />
               </a>
             ))}
           </nav>
 
-          {/* 3. Cụm Chức Năng Theo Ảnh image_8456ec.png */}
+          {/* 3. Cụm Chức Năng */}
           <div className="flex-1 flex items-center justify-end">
 
             {/* Khung chức năng bo góc màu đỏ */}
@@ -61,7 +68,6 @@ export default function Header() {
                 <svg className="w-5 h-5 stroke-current" fill="none" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                 </svg>
-                {/* Badge tròn đỏ chứa số 0 */}
                 <span className="absolute -top-2.5 -right-2.5 w-4.5 h-4.5 bg-[#b31f24] rounded-full text-white text-[10px] flex items-center justify-center font-bold border border-white">
                   0
                 </span>
@@ -69,7 +75,7 @@ export default function Header() {
 
             </div>
 
-            {/* Nút Menu Mobile (chỉ hiện trên màn hình nhỏ) */}
+            {/* Nút Menu Mobile */}
             <button className="md:hidden text-gray-800 ml-4" onClick={() => setMenuOpen(!menuOpen)}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <line x1="3" y1="6" x2="21" y2="6" />
@@ -84,8 +90,14 @@ export default function Header() {
         {/* Mobile Menu */}
         {menuOpen && (
           <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4 shadow-inner">
-            {NAV_LINKS.map(link => (
-              <a key={link} href="#" className="text-gray-800 hover:text-[#b31f24] text-[12px] tracking-[0.15em] uppercase font-medium">{link}</a>
+            {NAV_LINKS.map(item => (
+              <a 
+                key={item.label} 
+                href={item.path} 
+                className="text-gray-800 hover:text-[#b31f24] text-[12px] tracking-[0.15em] uppercase font-medium"
+              >
+                {item.label}
+              </a>
             ))}
           </div>
         )}

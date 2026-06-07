@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useParams } from "react-router-dom";
-import { listPosts, travelCategories } from './mockTravelData';
-import Tienich from '../components/Tienich';
+import { listPosts } from './mockTravelData';
 import { postDetailPath } from '../utils/constants';
 
 export default function App() {
@@ -63,78 +62,69 @@ export default function App() {
       <div className="flex flex-col md:flex-row gap-8 w-full">
 
         {/* CỘT TRÁI (60%) */}
-        <div className="w-full md:w-[60%] flex flex-col space-y-10">
 
-          {/* SESSION 1: Bài viết tiêu điểm */}
-          {featuredPost && (
-            <div className="border-t-2 border-black pt-4">
-              <h3 className="font-serif text-lg font-bold mb-4 text-gray-900">Latest in Hotel & Resort</h3>
-              <FeaturedPostCard post={featuredPost} />
+        {/* SESSION 1: Bài viết tiêu điểm */}
+        {featuredPost && (
+          <div className="border-t-2 border-black pt-4">
+            <h3 className="font-serif text-lg font-bold mb-4 text-gray-900">Latest in Hotel & Resort</h3>
+            <FeaturedPostCard post={featuredPost} />
+          </div>
+        )}
+
+        {/* SESSION 2: Lưới bài viết nhỏ có Phân Trang */}
+        <div id="session2-start" className="border-t border-gray-200 pt-8 flex flex-col space-y-8">
+
+          {/* Lưới hiển thị bài viết */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
+            {currentGridPosts.map((post) => (
+              <SimpleGridCard key={post.id} post={post} />
+            ))}
+          </div>
+
+          {/* Thanh điều hướng phân trang (Pagination UI) */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center space-x-2 pt-4">
+              {/* Nút Quay lại (Prev) */}
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`px-3 py-2 text-xs font-bold uppercase border transition-colors ${currentPage === 1
+                  ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                  : 'border-gray-300 text-gray-700 hover:bg-[#0088cc] hover:text-white hover:border-[#0088cc]'
+                  }`}
+              >
+                Prev
+              </button>
+
+              {/* Danh sách số trang */}
+              {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNumber) => (
+                <button
+                  key={pageNumber}
+                  onClick={() => paginate(pageNumber)}
+                  className={`w-9 h-9 text-xs font-bold border transition-colors ${currentPage === pageNumber
+                    ? 'bg-[#0088cc] text-white border-[#0088cc]'
+                    : 'border-gray-300 text-gray-700 hover:bg-[#0088cc] hover:text-white hover:border-[#0088cc]'
+                    }`}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+
+              {/* Nút Tiếp theo (Next) */}
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-2 text-xs font-bold uppercase border transition-colors ${currentPage === totalPages
+                  ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                  : 'border-gray-300 text-gray-700 hover:bg-[#0088cc] hover:text-white hover:border-[#0088cc]'
+                  }`}
+              >
+                Next
+              </button>
             </div>
           )}
 
-          {/* SESSION 2: Lưới bài viết nhỏ có Phân Trang */}
-          <div id="session2-start" className="border-t border-gray-200 pt-8 flex flex-col space-y-8">
-
-            {/* Lưới hiển thị bài viết */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
-              {currentGridPosts.map((post) => (
-                <SimpleGridCard key={post.id} post={post} />
-              ))}
-            </div>
-
-            {/* Thanh điều hướng phân trang (Pagination UI) */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center space-x-2 pt-4">
-                {/* Nút Quay lại (Prev) */}
-                <button
-                  onClick={() => paginate(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`px-3 py-2 text-xs font-bold uppercase border transition-colors ${currentPage === 1
-                      ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                      : 'border-gray-300 text-gray-700 hover:bg-[#0088cc] hover:text-white hover:border-[#0088cc]'
-                    }`}
-                >
-                  Prev
-                </button>
-
-                {/* Danh sách số trang */}
-                {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNumber) => (
-                  <button
-                    key={pageNumber}
-                    onClick={() => paginate(pageNumber)}
-                    className={`w-9 h-9 text-xs font-bold border transition-colors ${currentPage === pageNumber
-                        ? 'bg-[#0088cc] text-white border-[#0088cc]'
-                        : 'border-gray-300 text-gray-700 hover:bg-[#0088cc] hover:text-white hover:border-[#0088cc]'
-                      }`}
-                  >
-                    {pageNumber}
-                  </button>
-                ))}
-
-                {/* Nút Tiếp theo (Next) */}
-                <button
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`px-3 py-2 text-xs font-bold uppercase border transition-colors ${currentPage === totalPages
-                      ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                      : 'border-gray-300 text-gray-700 hover:bg-[#0088cc] hover:text-white hover:border-[#0088cc]'
-                    }`}
-                >
-                  Next
-                </button>
-              </div>
-            )}
-
-          </div>
-
         </div>
-
-        {/* CỘT PHẢI (40%) - Sidebar */}
-        <div className="w-full md:w-[40%] border border-gray-100 p-4 h-fit bg-gray-50">
-          <Tienich listPosts={listPosts} travelCategories={travelCategories} />
-        </div>
-
       </div>
     </div>
   );

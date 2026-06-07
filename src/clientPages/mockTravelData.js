@@ -1,59 +1,3 @@
-export const travelCategories = [
-  "Destination",
-  "Trip Ideas",
-  "Food & Culture",
-  "Tip & Planning",
-  "News & Advice",
-  "Photography",
-];
-
-export const featuredPosts = [
-  {
-    id: 1,
-    title: "Bucket List Experiences: Must-Do Adventures Around the Globe",
-    category: "Tip & Planning",
-    author: "Penci Design",
-    date: "March 28, 2024",
-    image:
-      "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1170&q=80",
-    excerpt:
-      "A hand-picked guide to immersive landscapes, memorable journeys, and once-in-a-lifetime travel moments.",
-  },
-  {
-    id: 2,
-    title: "Culinary Journeys: Exploring Foodie Destinations Around the World",
-    category: "Food & Culture",
-    author: "Penci Design",
-    date: "March 28, 2024",
-    image:
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1170&q=80",
-    excerpt:
-      "From night markets to chef-led tables, these cities turn every meal into part of the itinerary.",
-  },
-  {
-    id: 3,
-    title:
-      "Photography Expeditions: Capturing the World's Wonders Through Lens",
-    category: "Destination",
-    secondCategory: "News & Advice",
-    author: "Penci Design",
-    date: "March 28, 2024",
-    image:
-      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1170&q=80",
-    excerpt:
-      "The luxury train service, spearheaded by the Saudi Ministry of Tourism and the Saudi Railway Company, promises to redefine luxury travel in the region.",
-  },
-];
-
-export const sidePosts = [
-  "Experience Luxury at Four Seasons Hotel, Surf Club, Surfside, Florida",
-  "25 Most Beautiful Places in the Caribbean From Emerald Sinkholes to Private Islands",
-  "How to Plan the Perfect Hawaii Honeymoon, According to Experts",
-  "50 Best Honeymoon Destinations Around the World",
-  "How to Plan the Perfect Trip to Bolzano, Italy",
-  "How to Plan the Perfect Trip to Wimberley, Texas",
-];
-
 export const listPosts = [
   {
     id: 4,
@@ -148,54 +92,183 @@ export const listPosts = [
   },
 ];
 
-export const mockVideos = [
+export const HERO_PRODUCTS = [
   {
     id: 1,
-    title: "[4K] Hawaii 🇺🇸 | The BEST DAY TO VISIT WAIKIKI!...",
-    duration: "23:13",
-    thumbnail:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300&auto=format&fit=crop&q=60",
-    embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    name: "Lumière Noire",
+    brand: "Maison d'Or",
+    note: "Gỗ đàn hương · Hoa nhài · Xạ hương",
+    price: "2.850.000",
+    badge: "Best Seller",
+    img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    size: "100ml",
+    subTitle: "Perfume & Cologne\nLong Lasting\nWomen's Perfumes",
+    tagLine: "BST NƯỚC HOA FORMAT MADE IN FRANCE TRỞ LẠI",
   },
   {
     id: 2,
-    title: "[4K] San Francisco 🇺🇸 | Golden Gate Bridge & Fisherman's...",
-    duration: "29:38",
-    thumbnail:
-      "https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?w=300&auto=format&fit=crop&q=60",
-    embedUrl: "",
+    name: "Velvet Oud",
+    brand: "Sudes Noir",
+    note: "Oud · Hổ phách · Hoa hồng",
+    price: "3.450.000",
+    badge: "New Arrival",
+    img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    size: "75ml",
+    subTitle: "Velvet Oud Luxury\nIntense Scent\nUnisex Collection",
+    tagLine: "HƯƠNG THƠM ĐẲNG CẤP TỪ TRUNG ĐÔNG",
   },
   {
     id: 3,
-    title: "[4K] Japan 🇯🇵 | Tokyo Ginza Weekend Walking Tour: Exploring...",
-    duration: "35:01",
-    thumbnail:
-      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=300&auto=format&fit=crop&q=60",
-    embedUrl: "",
+    name: "Eau de Lumière",
+    brand: "Blanc & Or",
+    note: "Cam bergamot · Iris · Cèdre",
+    price: "1.950.000",
+    badge: "Trending",
+    img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    size: "50ml",
+    subTitle: "Eau de Lumière\nFresh & Elegant\nDaily Fragrance",
+    tagLine: "SỰ TƯƠI MÁT TINH TẾ CHO NGÀY MỚI",
+  },
+];
+
+export const CATEGORIES = [
+  {
+    id: "04",
+    label: "NƯỚC HOA CHIẾT",
+    count: "18 sản phẩm",
+    desc: "Nước hoa chiết nhỏ gọn, dễ dàng mang theo bên mình khi đi làm, đi du lịch hoặc thử nhiều mùi hương mà không tốn kém nhiều.",
+    img: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&q=80",
   },
   {
+    id: "01",
+    label: "NƯỚC HOA NAM",
+    count: "48 sản phẩm",
+    desc: "Mạnh mẽ, cá tính và lôi cuốn. Những hương thơm tinh tế giúp phái mạnh khẳng định đẳng cấp và để lại dấu ấn riêng biệt.",
+    img: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&q=80",
+  },
+  {
+    id: "02",
+    label: "NƯỚC HOA NỮ",
+    count: "62 sản phẩm",
+    desc: "Quyến rũ, ngọt ngào và thanh lịch. Bộ sưu tập tôn vinh vẻ đẹp kiêu sa và khơi gợi cảm xúc quyến rũ tự nhiên.",
+    img: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&q=80",
+  },
+  {
+    id: "03",
+    label: "UNISEX",
+    count: "35 sản phẩm",
+    desc: "Sự giao thoa mùi hương độc đáo không biên giới, phù hợp cho cả nam và nữ muốn tìm kiếm sự khác biệt.",
+    img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&q=80",
+  },
+  {
+    id: "05",
+    label: "GIFT SET",
+    count: "24 bộ quà",
+    desc: "Hộp quà tặng sang trọng, tinh tế tích hợp nhiều tầng hương. Lựa chọn lý tưởng để gửi gắm tâm tình cho người thương.",
+    img: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&q=80",
+  },
+];
+
+export const FEATURED_PRODUCTS = [
+  {
     id: 4,
-    title: "Walk Around Ueno Park and Shinobazu Pond | Tokyo",
-    duration: "10:54",
-    thumbnail:
-      "https://images.unsplash.com/photo-1528164344705-47542687000d?w=300&auto=format&fit=crop&q=60",
-    embedUrl: "",
+    name: "Midnight Rose",
+    brand: "Sudes",
+    price: "1.650.000",
+    img: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&q=80",
+    tag: "Mới",
   },
   {
     id: 5,
-    title: "[4K] Bali 🇮🇩 | Walking Tour of Conrad Hotel Bali:...",
-    duration: "22:43",
-    thumbnail:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=300&auto=format&fit=crop&q=60",
-    embedUrl: "",
+    name: "Golden Iris",
+    brand: "Maison",
+    price: "2.100.000",
+    img: "https://images.unsplash.com/photo-1566977776052-6e61e35bf9be?w=400&q=80",
+    tag: "Hot",
   },
   {
     id: 6,
-    title: "[4K] USA 🇺🇸 | New York Tour of Brooklyn Bridge...",
-    duration: "23:56",
-    thumbnail:
-      "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=300&auto=format&fit=crop&q=60",
-    embedUrl: "",
+    name: "Santal Blanc",
+    brand: "Sudes Noir",
+    price: "2.750.000",
+    img: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&q=80",
+    tag: "Sale",
+  },
+  {
+    id: 7,
+    name: "Amber Mystique",
+    brand: "Blanc & Or",
+    price: "1.850.000",
+    img: "https://images.unsplash.com/photo-1557170334-a9632e77c6e4?w=400&q=80",
+    tag: "Mới",
+  },
+];
+
+export const BRANDS = [
+  "Chanel",
+  "Dior",
+  "Tom Ford",
+  "Creed",
+  "Jo Malone",
+  "Guerlain",
+  "Hermès",
+  "YSL",
+];
+
+export const TESTIMONIALS = [
+  {
+    name: "Nguyễn Minh Anh",
+    text: "Mùi hương tinh tế, lưu hương rất lâu. Đóng gói sang trọng, xứng đáng là quà tặng cao cấp.",
+    stars: 5,
+  },
+  {
+    name: "Trần Thị Hoa",
+    text: "Lần đầu mua online nhưng rất hài lòng. Sản phẩm chính hãng 100%, giao hàng nhanh.",
+    stars: 5,
+  },
+  {
+    name: "Lê Văn Đức",
+    text: "Tư vấn nhiệt tình, mùi hương đúng như mô tả. Sẽ tiếp tục ủng hộ shop.",
+    stars: 5,
+  },
+];
+
+export const BLOG_POSTS = [
+  {
+    id: 1,
+    title: "Nước hoa nam hương gỗ - Bản sắc cứng cỏi của đàn ông'",
+    date: "Tháng 11, 2025",
+    comments: 0,
+    badge: "Kiến thức nước hoa",
+    desc: "Chọn nước hoa - tưởng dễ nhưng lại không hề đơn giản Thoạt nhìn, việc chọn nước hoa có vẻ như chỉ là thử vài mùi và chọn loại khiến bạn thấy dễ chịu....",
+    img: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=600&q=80",
+  },
+  {
+    id: 2,
+    title: "Nước hoa “sạch sẽ” – Trào lưu “clean fragrance” bùng nổ mạnh mẽ",
+    date: "Tháng 11, 2025",
+    comments: 0,
+    badge: "Kiến thức nước hoa",
+    desc: "Clean fragrance thực chất là gì? Clean fragrance không gợi nhớ đến mùi chất tẩy rửa hay dung dịch khử mùi mà là một khái niệm tinh tế trong nghệ thuật điều chế nước...",
+    img: "https://images.unsplash.com/photo-1615655096345-61a54750068d?w=600&q=80",
+  },
+  {
+    id: 3,
+    title: "TOP 10 nước hoa nữ hương tự nhiên đáng sở hữu",
+    date: "Tháng 11, 2025",
+    comments: 0,
+    badge: "Kiến thức nước hoa",
+    desc: "Đặc điểm nước hoa nữ hương tự nhiên Thành phần chiết xuất từ thiên nhiên: Thông thường, các tinh chất được lấy từ cánh hoa, lá cây, thân gỗ hoặc vỏ trái cây, mang đến...",
+    img: "https://images.unsplash.com/photo-1594913760779-89c4c8e04aac?w=600&q=80",
+  },
+  {
+    id: 4,
+    title: "Bí quyết xịt nước hoa giữ mùi lâu phai suốt 24 giờ",
+    date: "Tháng 12, 2025",
+    comments: 2,
+    badge: "Kiến thức nước hoa",
+    desc: "Làm thế nào để hương thơm lưu giữ trọn vẹn trên cơ thể? Hãy chú ý đến các vị trí điểm mạch và thời điểm vàng ngay sau khi tắm...",
+    img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600&q=80",
   },
 ];
 

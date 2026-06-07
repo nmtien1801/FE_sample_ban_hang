@@ -2,14 +2,10 @@ import React from "react";
 import { Facebook, Instagram, Link as LinkIcon, Twitter } from "lucide-react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import {
-  featuredPosts,
   listPosts,
-  travelCategories,
 } from "./mockTravelData";
-import Tienich from "../components/Tienich";
 import { postDetailPath } from "../utils/constants.js";
 
-const allPosts = [...featuredPosts, ...listPosts];
 
 const articleSections = [
   "The luxury train service, spearheaded by the Saudi Ministry of Tourism and the Saudi Railway Company, promises to redefine luxury travel in the region. With a focus on combining modern amenities with traditional Arabian hospitality, the experience aims to showcase rich cultural heritage and natural beauty while offering world-class comfort and convenience.",
@@ -57,17 +53,17 @@ const RelatedPost = ({ post }) => (
 
 export default function ChiTietBaiViet() {
   const { id } = useParams();
-  const post = allPosts.find((item) => String(item.id) === String(id));
+  const post = listPosts.find((item) => String(item.id) === String(id));
 
   if (!post) {
     return <Navigate to="/tin-tuc" replace />;
   }
 
-  const relatedPosts = allPosts
+  const relatedPosts = listPosts
     .filter((item) => item.id !== post.id && item.category === post.category)
     .slice(0, 3);
 
-  const fallbackRelated = allPosts
+  const fallbackRelated = listPosts
     .filter((item) => item.id !== post.id)
     .slice(0, 3 - relatedPosts.length);
 
@@ -92,15 +88,7 @@ export default function ChiTietBaiViet() {
       {/* ======================================================= */}
       <div className="relative z-20 bg-white shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
         <div className="mx-auto max-w-[1170px] px-5 md:px-0">
-          {/* Lưới Grid chính */}
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_360px] items-start">
-
-            {/* ======================================================= */}
-            {/* CỘT TRÁI (60%): Nhích ngược lên trên đè vào ảnh banner  */}
-            {/* ======================================================= */}
-            {/* Thêm '-mt-[80px]' để đẩy hộp nội dung đè lên ảnh nền giống hình */}
             <div className="min-w-0 bg-white relative z-30 -mt-[40px] pt-10 pb-12 pr-0 lg:pr-8 px-5">
-
               {/* Breadcrumb nằm gọn gàng phía trên cùng hộp trắng */}
               <nav className="mb-6 flex flex-wrap items-center gap-2 text-[13px] text-neutral-500">
                 <Link to="/trang-chu" className="hover:text-[#6eb48c]">Home</Link>
@@ -147,23 +135,6 @@ export default function ChiTietBaiViet() {
                   <p>The practical details matter too: book flexible time into each stop, keep a short list of priorities, and leave room for the unplanned meal...</p>
                 </div>
 
-                {/* Tags & Social Share */}
-                <div className="mt-10 flex flex-wrap items-center justify-between gap-5 border-y border-[#ececec] py-5">
-                  <div className="flex flex-wrap gap-2">
-                    {travelCategories.slice(0, 3).map((category) => (
-                      <Link key={category} to="/tin-tuc" className="border border-[#ececec] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-neutral-700 transition hover:border-[#6eb48c] hover:text-[#6eb48c]">
-                        {category}
-                      </Link>
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    <ShareButton label="Share on Facebook"><Facebook className="h-4 w-4" /></ShareButton>
-                    <ShareButton label="Share on Twitter"><Twitter className="h-4 w-4" /></ShareButton>
-                    <ShareButton label="Share on Instagram"><Instagram className="h-4 w-4" /></ShareButton>
-                    <ShareButton label="Copy link"><LinkIcon className="h-4 w-4" /></ShareButton>
-                  </div>
-                </div>
-
                 {/* Section: You May Also Like */}
                 <section className="mt-12">
                   <SectionTitle>You May Also Like</SectionTitle>
@@ -176,16 +147,6 @@ export default function ChiTietBaiViet() {
               </div>
 
             </div>
-
-            {/* ======================================================= */}
-            {/* CỘT PHẢI (40%): Sidebar bắt đầu ngay dưới chân banner   */}
-            {/* ======================================================= */}
-            {/* Thêm 'pt-10' để căn đều khoảng cách từ dưới ảnh của Sidebar */}
-            <aside className="lg:sticky lg:top-36 pt-10 pb-12">
-              <Tienich listPosts={listPosts} travelCategories={travelCategories} />
-            </aside>
-
-          </div>
 
         </div>
       </div>
