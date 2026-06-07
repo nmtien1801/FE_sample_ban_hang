@@ -1,342 +1,708 @@
-import React, { useRef, useState } from "react";
-import {
-  featuredPosts,
-  listPosts,
-  sidePosts,
-  travelCategories,
-  mockVideos
-} from "./mockTravelData";
-import Tienich from "../components/Tienich";
-import { postDetailPath } from "../utils/constants.js";
+import React, { useState, useEffect } from "react";
 
-const CategoryLabels = ({ post }) => (
-  <div className="mb-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-    <span className="text-[11px] font-bold text-[#6eb48c]">
-      {post.category}
-    </span>
-    {post.secondCategory && (
-      <span className="text-[11px] font-bold text-[#6eb48c]">
-        {post.secondCategory}
-      </span>
-    )}
-  </div>
-);
+const HERO_PRODUCTS = [
+  {
+    id: 1,
+    name: "Lumière Noire",
+    brand: "Maison d'Or",
+    note: "Gỗ đàn hương · Hoa nhài · Xạ hương",
+    price: "2.850.000",
+    badge: "Best Seller",
+    img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    size: "100ml",
+    subTitle: "Perfume & Cologne\nLong Lasting\nWomen's Perfumes",
+    tagLine: "BST NƯỚC HOA FORMAT MADE IN FRANCE TRỞ LẠI"
+  },
+  {
+    id: 2,
+    name: "Velvet Oud",
+    brand: "Sudes Noir",
+    note: "Oud · Hổ phách · Hoa hồng",
+    price: "3.450.000",
+    badge: "New Arrival",
+    img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    size: "75ml",
+    subTitle: "Velvet Oud Luxury\nIntense Scent\nUnisex Collection",
+    tagLine: "HƯƠNG THƠM ĐẲNG CẤP TỪ TRUNG ĐÔNG"
+  },
+  {
+    id: 3,
+    name: "Eau de Lumière",
+    brand: "Blanc & Or",
+    note: "Cam bergamot · Iris · Cèdre",
+    price: "1.950.000",
+    badge: "Trending",
+    img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    size: "50ml",
+    subTitle: "Eau de Lumière\nFresh & Elegant\nDaily Fragrance",
+    tagLine: "SỰ TƯƠI MÁT TINH TẾ CHO NGÀY MỚI"
+  },
+];
 
-const StandardPost = ({ post, large = false }) => (
-  <article className="group text-center">
-    <a href={postDetailPath(post.category, post)} className="block overflow-hidden bg-neutral-100">
-      <img
-        src={post.image}
-        alt={post.title}
-        className={`w-full object-cover transition duration-700 group-hover:scale-105 ${large ? "aspect-[1.5]" : "aspect-[1.5]"
-          }`}
-      />
-    </a>
-    <div className={large ? "px-4 pt-7" : "px-2 pt-5"}>
-      <CategoryLabels post={post} />
-      <h2
-        className={`mx-auto font-serif font-semibold leading-tight text-neutral-950 ${large ? "max-w-[650px] text-3xl md:text-[34px]" : "text-[24px]"
-          }`}
-      >
-        <a href={postDetailPath(post.category, post)} className="transition hover:text-[#6eb48c]">
-          {post.title}
-        </a>
-      </h2>
-      <p className="mt-3 text-[12px] text-neutral-500">
-        written by{" "}
-        <a href="#" className="font-semibold text-neutral-800 hover:text-[#6eb48c]">
-          {post.author}
-        </a>
-      </p>
-      {large && (
-        <>
-          <p className="mx-auto mt-6 max-w-[610px] text-[15px] leading-7 text-neutral-600">
-            {post.excerpt}
-          </p>
-          <a
-            href={postDetailPath(post.category, post)}
-            className="mt-6 inline-flex items-center border border-neutral-900 px-7 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-neutral-900 transition hover:border-[#6eb48c] hover:bg-[#6eb48c] hover:text-white"
-          >
-            Continue Reading
-          </a>
-        </>
-      )}
+const CATEGORIES = [
+  {
+    id: "04",
+    label: "NƯỚC HOA CHIẾT",
+    count: "18 sản phẩm",
+    desc: "Nước hoa chiết nhỏ gọn, dễ dàng mang theo bên mình khi đi làm, đi du lịch hoặc thử nhiều mùi hương mà không tốn kém nhiều.",
+    img: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&q=80",
+  },
+  {
+    id: "01",
+    label: "NƯỚC HOA NAM",
+    count: "48 sản phẩm",
+    desc: "Mạnh mẽ, cá tính và lôi cuốn. Những hương thơm tinh tế giúp phái mạnh khẳng định đẳng cấp và để lại dấu ấn riêng biệt.",
+    img: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&q=80",
+  },
+  {
+    id: "02",
+    label: "NƯỚC HOA NỮ",
+    count: "62 sản phẩm",
+    desc: "Quyến rũ, ngọt ngào và thanh lịch. Bộ sưu tập tôn vinh vẻ đẹp kiêu sa và khơi gợi cảm xúc quyến rũ tự nhiên.",
+    img: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&q=80",
+  },
+  {
+    id: "03",
+    label: "UNISEX",
+    count: "35 sản phẩm",
+    desc: "Sự giao thoa mùi hương độc đáo không biên giới, phù hợp cho cả nam và nữ muốn tìm kiếm sự khác biệt.",
+    img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&q=80",
+  },
+  {
+    id: "05",
+    label: "GIFT SET",
+    count: "24 bộ quà",
+    desc: "Hộp quà tặng sang trọng, tinh tế tích hợp nhiều tầng hương. Lựa chọn lý tưởng để gửi gắm tâm tình cho người thương.",
+    img: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&q=80",
+  }
+];
+
+const FEATURED_PRODUCTS = [
+  { id: 4, name: "Midnight Rose", brand: "Sudes", price: "1.650.000", img: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&q=80", tag: "Mới" },
+  { id: 5, name: "Golden Iris", brand: "Maison", price: "2.100.000", img: "https://images.unsplash.com/photo-1566977776052-6e61e35bf9be?w=400&q=80", tag: "Hot" },
+  { id: 6, name: "Santal Blanc", brand: "Sudes Noir", price: "2.750.000", img: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&q=80", tag: "Sale" },
+  { id: 7, name: "Amber Mystique", brand: "Blanc & Or", price: "1.850.000", img: "https://images.unsplash.com/photo-1557170334-a9632e77c6e4?w=400&q=80", tag: "Mới" },
+];
+
+const BRANDS = ["Chanel", "Dior", "Tom Ford", "Creed", "Jo Malone", "Guerlain", "Hermès", "YSL"];
+
+const TESTIMONIALS = [
+  { name: "Nguyễn Minh Anh", text: "Mùi hương tinh tế, lưu hương rất lâu. Đóng gói sang trọng, xứng đáng là quà tặng cao cấp.", stars: 5 },
+  { name: "Trần Thị Hoa", text: "Lần đầu mua online nhưng rất hài lòng. Sản phẩm chính hãng 100%, giao hàng nhanh.", stars: 5 },
+  { name: "Lê Văn Đức", text: "Tư vấn nhiệt tình, mùi hương đúng như mô tả. Sẽ tiếp tục ủng hộ shop.", stars: 5 },
+];
+
+const BLOG_POSTS = [
+  {
+    id: 1,
+    title: "Nước hoa nam hương gỗ - Bản sắc cứng cỏi của đàn ông'",
+    date: "Tháng 11, 2025",
+    comments: 0,
+    badge: "Kiến thức nước hoa",
+    desc: "Chọn nước hoa - tưởng dễ nhưng lại không hề đơn giản Thoạt nhìn, việc chọn nước hoa có vẻ như chỉ là thử vài mùi và chọn loại khiến bạn thấy dễ chịu....",
+    img: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=600&q=80"
+  },
+  {
+    id: 2,
+    title: 'Nước hoa “sạch sẽ” – Trào lưu “clean fragrance” bùng nổ mạnh mẽ',
+    date: "Tháng 11, 2025",
+    comments: 0,
+    badge: "Kiến thức nước hoa",
+    desc: "Clean fragrance thực chất là gì? Clean fragrance không gợi nhớ đến mùi chất tẩy rửa hay dung dịch khử mùi mà là một khái niệm tinh tế trong nghệ thuật điều chế nước...",
+    img: "https://images.unsplash.com/photo-1615655096345-61a54750068d?w=600&q=80"
+  },
+  {
+    id: 3,
+    title: "TOP 10 nước hoa nữ hương tự nhiên đáng sở hữu",
+    date: "Tháng 11, 2025",
+    comments: 0,
+    badge: "Kiến thức nước hoa",
+    desc: "Đặc điểm nước hoa nữ hương tự nhiên Thành phần chiết xuất từ thiên nhiên: Thông thường, các tinh chất được lấy từ cánh hoa, lá cây, thân gỗ hoặc vỏ trái cây, mang đến...",
+    img: "https://images.unsplash.com/photo-1594913760779-89c4c8e04aac?w=600&q=80"
+  },
+  {
+    id: 4,
+    title: "Bí quyết xịt nước hoa giữ mùi lâu phai suốt 24 giờ",
+    date: "Tháng 12, 2025",
+    comments: 2,
+    badge: "Kiến thức nước hoa",
+    desc: "Làm thế nào để hương thơm lưu giữ trọn vẹn trên cơ thể? Hãy chú ý đến các vị trí điểm mạch và thời điểm vàng ngay sau khi tắm...",
+    img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600&q=80"
+  }
+];
+
+function StarRating({ stars }) {
+  return (
+    <div className="flex gap-0.5 text-amber-500 text-sm">
+      {Array.from({ length: stars }).map((_, i) => <span key={i}>★</span>)}
     </div>
-  </article>
-);
+  );
+}
 
-const SideList = () => (
-  <aside className="space-y-0">
-    {sidePosts.map((title) => (
-      <article key={title} className="border-b border-[#ececec] py-[15px] first:pt-0 last:border-b-0">
-        <h4 className="font-serif text-[18px] font-semibold leading-snug text-neutral-950">
-          <a href={postDetailPath(travelCategories[0], { title })} className="transition hover:text-[#6eb48c]">
-            {title}
-          </a>
-        </h4>
-        <p className="mt-2 text-xs text-neutral-500">
-          by <span className="font-semibold text-neutral-800">Penci Design</span>
-        </p>
-      </article>
-    ))}
-  </aside>
-);
-
-const SectionTitle = ({ children }) => (
-  <div className="mb-8 flex items-center gap-5">
-    <h3 className="font-serif text-[26px] font-semibold text-neutral-950">{children}</h3>
-    <div className="h-px flex-1 bg-neutral-200">
-      <div className="h-[2px] w-12 bg-[#6eb48c]" />
+function ProductCard({ product, featured = false }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      className={`group relative bg-white border border-gray-200 overflow-hidden transition-all duration-500 ${featured ? "rounded-none" : "rounded-md"} ${hovered ? "border-[#b31f24] shadow-md" : ""}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="relative overflow-hidden aspect-[3/4] bg-gray-50">
+        <img
+          src={product.img}
+          alt={product.name}
+          className={`w-full h-full object-cover transition-transform duration-700 ${hovered ? "scale-105" : "scale-100"}`}
+        />
+        <div className={`absolute inset-0 bg-gradient-to-t from-black/40 via-transparent transition-opacity duration-300 ${hovered ? "opacity-100" : "opacity-30"}`} />
+        {product.badge && (
+          <div className="absolute top-3 left-3 bg-[#b31f24] text-white text-[10px] tracking-[0.15em] font-semibold px-2.5 py-1 uppercase rounded-sm">
+            {product.badge}
+          </div>
+        )}
+        {product.tag && (
+          <div className="absolute top-3 right-3 bg-[#b31f24] text-white text-[10px] tracking-[0.15em] font-semibold px-2 py-1 uppercase rounded-sm">
+            {product.tag}
+          </div>
+        )}
+        <div className={`absolute bottom-0 left-0 right-0 p-4 transition-all duration-300 ${hovered ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`}>
+          <button className="w-full bg-[#b31f24] hover:bg-[#91161a] text-white text-xs tracking-[0.15em] uppercase font-semibold py-2.5 transition-colors duration-200 rounded-sm">
+            Thêm vào giỏ
+          </button>
+        </div>
+      </div>
+      <div className="p-4 bg-white">
+        <p className="text-gray-400 text-[10px] tracking-[0.2em] uppercase mb-1">{product.brand}</p>
+        <h3 className="text-gray-900 font-sans font-bold text-base leading-tight mb-1 group-hover:text-[#b31f24] transition-colors">{product.name}</h3>
+        {product.note && <p className="text-gray-500 text-[11px] tracking-wide mb-3">{product.note}</p>}
+        <div className="flex items-center justify-between">
+          <span className="text-[#b31f24] font-medium text-base tracking-wide">{product.price}₫</span>
+          {product.size && <span className="text-gray-400 text-[10px] tracking-[0.1em]">{product.size}</span>}
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
-const SmallPost = ({ post }) => (
-  <article className="grid grid-cols-[118px_1fr] gap-5 border-b border-[#ececec] pb-6 md:grid-cols-[210px_1fr]">
-    {/* Bọc ảnh trong div với kích thước cố định */}
-    <a href={postDetailPath(post.category, post)} className="block overflow-hidden bg-neutral-100 h-[78px] md:h-[140px]">
-      <img
-        src={post.image}
-        alt={post.title}
-        className="h-full w-full object-cover transition duration-500 hover:scale-105"
-      />
-    </a>
-    <div>
-      <span className="text-[11px] font-bold text-[#6eb48c] uppercase">{post.category}</span>
-      <h4 className="mt-2 font-serif text-[20px] md:text-[22px] font-semibold leading-snug text-neutral-950">
-        <a href={postDetailPath(post.category, post)} className="transition hover:text-[#6eb48c]">
-          {post.title}
-        </a>
-      </h4>
-      <p className="mt-2 text-xs text-neutral-500">{post.date}</p>
-      <p className="mt-2 text-[14px] leading-6 text-neutral-600 hidden md:block">
-        {post.description.length > 100 ? post.description.slice(0, 100) + "..." : post.description}
-      </p>
-    </div>
-  </article>
-);
+export default function SudesPerfumeHome() {
+  const [activeHero, setActiveHero] = useState(0);
+  const [catIndex, setCatIndex] = useState(0);
+  const [blogIndex, setBlogIndex] = useState(0);
 
-export default function TrangChu() {
-  const sliderRef = useRef(null);
-  const [leftOne, leftTwo, centerPost] = featuredPosts;
-  // State quản lý video đang được chọn phát
-  const [activeVideo, setActiveVideo] = useState(mockVideos[0]);
-  // State quản lý số lượng bài viết hiển thị lastest stories
-  const [visibleCount, setVisibleCount] = useState(4);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      handleHeroNext();
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [activeHero]);
 
-  const scrollLeft = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: -380, behavior: "smooth" });
-    }
+  const handleHeroNext = () => {
+    setActiveHero((prev) => (prev + 1) % HERO_PRODUCTS.length);
   };
 
-  const scrollRight = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: 380, behavior: "smooth" });
-    }
+  const handleHeroPrev = () => {
+    setActiveHero((prev) => (prev - 1 + HERO_PRODUCTS.length) % HERO_PRODUCTS.length);
   };
+
+  const handleBlogNext = () => {
+    setBlogIndex((prev) => {
+      const maxIndex = BLOG_POSTS.length - (window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1);
+      return prev >= maxIndex ? 0 : prev + 1;
+    });
+  };
+
+  const handleBlogPrev = () => {
+    setBlogIndex((prev) => {
+      if (prev === 0) {
+        const maxIndex = BLOG_POSTS.length - (window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1);
+        return maxIndex;
+      }
+      return prev - 1;
+    });
+  };
+
+  const handleCatNext = () => {
+    setCatIndex((prev) => (prev + 1) % CATEGORIES.length);
+  };
+
+  const handleCatPrev = () => {
+    setCatIndex((prev) => (prev - 1 + CATEGORIES.length) % CATEGORIES.length);
+  };
+
+  const activeHeroProduct = HERO_PRODUCTS[activeHero];
+  const prevHeroProduct = HERO_PRODUCTS[(activeHero - 1 + HERO_PRODUCTS.length) % HERO_PRODUCTS.length];
+  const nextHeroProduct = HERO_PRODUCTS[(activeHero + 1) % HERO_PRODUCTS.length];
+
+  const visibleCategories = [
+    CATEGORIES[catIndex],
+    CATEGORIES[(catIndex + 1) % CATEGORIES.length],
+    CATEGORIES[(catIndex + 2) % CATEGORIES.length],
+  ];
+
+  const activeCategory = CATEGORIES[catIndex];
 
   return (
-    <main className="bg-white text-neutral-900">
-      <section className="mx-auto grid max-w-[1170px] grid-cols-1 gap-10 px-5 py-10 md:px-0 lg:grid-cols-[270px_1fr_270px] lg:gap-[30px]">
-        <div className="space-y-10">
-          <StandardPost post={leftOne} />
-          <StandardPost post={leftTwo} />
+    <div className="bg-white text-gray-800 min-h-screen font-sans overflow-x-hidden antialiased">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Jost', sans-serif; background-color: #ffffff; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes slideIn { from { opacity:0; transform:translateX(-30px); } to { opacity:1; transform:translateX(0); } }
+        @keyframes marquee { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+        .animate-fade { animation: fadeIn 0.8s ease forwards; }
+        .animate-slide { animation: slideIn 0.7s ease forwards; }
+        .animate-marquee { animation: marquee 25s linear infinite; }
+      `}</style>
+
+      {/* ─── 1. HERO BANNER SECTION ─── */}
+      <section className="relative min-h-[750px] h-[90vh] w-full flex items-center overflow-hidden bg-gradient-to-r from-[#e3d7d0] via-[#eedfd9] to-[#f5eae4]">
+        <div className="absolute inset-0 z-0 flex justify-end items-center">
+          <div className="w-full md:w-[60%] h-full relative">
+            <img
+              key={activeHeroProduct.id}
+              src={activeHeroProduct.img}
+              alt={activeHeroProduct.name}
+              className="w-full h-full object-cover object-right md:object-center mix-blend-multiply opacity-80 animate-fade"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#e3d7d0] via-transparent to-transparent hidden md:block" />
+          </div>
         </div>
 
-        <StandardPost post={centerPost} large />
+        <div className="relative z-10 max-w-[1400px] w-full mx-auto px-6 md:px-12 flex flex-col justify-center h-full pt-16">
+          <div className="max-w-xl md:max-w-2xl text-left">
+            <h2 key={`title-${activeHeroProduct.id}`} className="font-sans text-4xl md:text-[56px] font-extrabold text-white leading-[1.15] drop-shadow-sm mb-4 tracking-tight whitespace-pre-line animate-slide">
+              {activeHeroProduct.subTitle}
+            </h2>
 
-        <SideList />
-      </section>
+            <p key={`tag-${activeHeroProduct.id}`} className="text-[#8e7a72] text-xs md:text-sm font-bold tracking-[0.1em] uppercase mb-8 animate-fade">
+              {activeHeroProduct.tagLine}
+            </p>
 
-      {/* trending stories */}
-      <section className="bg-[#f6f6f3] py-12 select-none">
-        <div className="mx-auto max-w-[1170px] px-4 md:px-0">
+            <div className="flex items-center gap-3 mb-6 overflow-visible">
+              <button
+                onClick={handleHeroPrev}
+                className="w-16 h-28 bg-white/40 backdrop-blur-sm rounded-2xl border border-white/20 p-1.5 opacity-40 hidden sm:flex items-center justify-center overflow-hidden transition-all duration-300 hover:opacity-60 cursor-pointer"
+              >
+                <img src={prevHeroProduct.img} alt="Previous" className="w-full h-full object-cover rounded-xl opacity-70" />
+              </button>
 
-          {/* ================= HEADER TITLE SYSTEM ================= */}
-          <div className="relative mb-10 text-center">
-            <div className="flex items-center justify-center gap-4">
-              {/* Đường gạch ngang mảnh bên trái */}
-              <div className="h-[1px] flex-1 bg-[#dedede] max-w-[100px] sm:max-w-[200px] md:max-w-[300px]"></div>
-
-              {/* Khung chứa Text */}
-              <div className="relative border border-[#313131] bg-white px-6 py-2.5">
-                <h3 className="font-serif text-[14px] font-bold uppercase tracking-[2px] text-[#313131]">
-                  Trending stories
-                </h3>
-                {/* Mũi tên nhọn trỏ xuống dưới đáy khung */}
-                <div className="absolute -bottom-[5px] left-1/2 h-0 w-0 -translate-x-1/2 border-l-[6px] border-r-[6px] border-t-[5px] border-l-transparent border-r-transparent border-t-[#313131]"></div>
+              <div key={`card-${activeHeroProduct.id}`} className="bg-white rounded-3xl p-4 shadow-[0_10px_30px_rgba(142,122,114,0.15)] flex items-center gap-4 border border-white min-w-[290px] max-w-[320px] animate-fade">
+                <div className="w-20 h-20 bg-[#f5f5f5] rounded-2xl p-1 flex items-center justify-center overflow-hidden">
+                  <img src={activeHeroProduct.img} alt={activeHeroProduct.name} className="h-full object-cover rounded-xl" />
+                </div>
+                <div>
+                  <span className="bg-[#b31f24]/10 text-[#b31f24] text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider mb-1 inline-block">
+                    {activeHeroProduct.badge}
+                  </span>
+                  <h4 className="font-bold text-gray-900 text-sm mb-0.5">{activeHeroProduct.name}</h4>
+                  <p className="text-gray-500 text-[11px] mb-2">{activeHeroProduct.brand} · {activeHeroProduct.size}</p>
+                  <p className="text-[#b31f24] font-semibold text-xs mb-1">{activeHeroProduct.price}₫</p>
+                </div>
               </div>
 
-              {/* Đường gạch ngang mảnh bên phải */}
-              <div className="h-[1px] flex-1 bg-[#dedede] max-w-[100px] sm:max-w-[200px] md:max-w-[300px]"></div>
+              <button
+                onClick={handleHeroNext}
+                className="w-16 h-28 bg-white/40 backdrop-blur-sm rounded-2xl border border-white/20 p-1.5 opacity-40 hidden sm:flex items-center justify-center overflow-hidden transition-all duration-300 hover:opacity-60 cursor-pointer"
+              >
+                <img src={nextHeroProduct.img} alt="Next" className="w-full h-full object-cover rounded-xl opacity-70" />
+              </button>
+            </div>
+
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-40 h-[2px] bg-gray-400/40 relative rounded-full">
+                <div
+                  className="absolute top-0 h-full bg-gray-800 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${100 / HERO_PRODUCTS.length}%`,
+                    left: `${(activeHero * 100) / HERO_PRODUCTS.length}%`
+                  }}
+                />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <button onClick={handleHeroPrev} className="w-6 h-6 rounded-full bg-white text-gray-700 hover:bg-[#b31f24] hover:text-white flex items-center justify-center text-xs shadow-sm transition-all">‹</button>
+                <button onClick={handleHeroNext} className="w-6 h-6 rounded-full bg-[#b31f24] text-white hover:bg-[#91161a] flex items-center justify-center text-xs shadow-sm transition-all">›</button>
+              </div>
+            </div>
+
+            <button className="inline-flex items-center gap-4 bg-white hover:bg-gray-50 text-gray-800 font-bold text-xs tracking-wider uppercase px-6 py-2.5 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.05)] transition-all group">
+              Tìm hiểu thêm
+              <span className="w-7 h-7 rounded-full bg-[#b31f24] text-white flex items-center justify-center text-xs group-hover:scale-105 transition-transform">➔</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 2. MARQUEE STRIP ─── */}
+      <div className="py-5 border-y border-gray-100 overflow-hidden bg-gray-50/50">
+        <div className="flex animate-marquee whitespace-nowrap">
+          {[...BRANDS, ...BRANDS].map((b, i) => (
+            <span key={i} className="inline-flex items-center gap-6 px-6 text-gray-400 text-[12px] tracking-[0.4em] uppercase font-medium">
+              {b} <span className="text-[#b31f24] text-[8px]">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ─── 3. BRAND INTRO & STATS SECTION ─── */}
+      <section className="max-w-[1400px] mx-auto px-6 md:px-12 py-24 bg-white">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          <div className="lg:col-span-6 relative overflow-hidden rounded-[32px] bg-gradient-to-br from-black via-zinc-900 to-stone-900 text-white min-h-[550px] flex flex-col justify-between p-8 md:p-14 group shadow-xl">
+            <div className="absolute inset-0 z-0">
+              <img
+                src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1000&q=80"
+                alt="Sudes Signature"
+                className="w-full h-full object-cover opacity-35 mix-blend-luminosity group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            </div>
+
+            <div className="relative z-10 max-w-xl">
+              <h2 className="font-sans text-3xl md:text-4xl font-bold leading-tight mb-8 tracking-wide text-white">
+                Dấu ấn từ mùi hương
+              </h2>
+              <p className="text-gray-300 text-base md:text-lg leading-relaxed font-light">
+                Chào mừng bạn đến với Sudes, nơi hội tụ những dòng nước hoa tinh tế, sang trọng và đầy cảm xúc. Chúng tôi tin rằng mỗi mùi hương là một tuyên ngôn cá nhân...
+              </p>
+            </div>
+
+            <div className="relative z-10 mt-10 pt-8 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+              <div>
+                <span className="block font-sans text-5xl md:text-6xl font-extrabold tracking-tight text-white mb-2">+2000</span>
+                <span className="text-sm md:text-base uppercase tracking-[0.15em] text-gray-400 font-semibold">ngày hoạt động</span>
+              </div>
+              <button className="self-start inline-flex items-center gap-5 bg-white hover:bg-gray-100 text-gray-900 font-bold text-sm tracking-wider uppercase pl-6 pr-2 py-2 rounded-full shadow-lg transition-all group/btn">
+                Tìm hiểu thêm
+                <span className="w-8 h-8 rounded-full bg-[#b31f24] text-white flex items-center justify-center text-sm group-hover/btn:translate-x-1 transition-transform">➔</span>
+              </button>
             </div>
           </div>
 
-          {/* ================= CAROUSEL SLIDER ================= */}
-          <div className="relative group">
+          <div className="lg:col-span-6 flex flex-col justify-between gap-8">
+            <div className="pl-2">
+              <p className="text-gray-400 text-sm tracking-[0.2em] uppercase font-bold mb-3">Giới thiệu</p>
+              <h3 className="font-sans text-3xl md:text-4xl font-black text-[#b31f24] uppercase tracking-tight mb-4">SUDES PERFUME</h3>
+              <p className="text-gray-600 text-base md:text-lg leading-relaxed max-w-2xl">
+                Sudes mang đến những dòng nước hoa chính hãng, tinh tế và phù hợp với từng cá tính. Chúng tôi không chỉ bán hương thơm, mà còn giúp bạn thể hiện phong cách và cảm xúc qua từng lựa chọn mùi hương.
+              </p>
+            </div>
 
-            {/* Nút điều hướng Trái (Prev) */}
-            <button
-              onClick={scrollLeft}
-              className="absolute -left-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#313131] shadow-[0_2px_5px_rgba(0,0,0,0.15)] opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 border border-neutral-100 hover:bg-[#6eb48c] hover:text-white"
-              aria-label="Previous posts"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="h-4 w-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
-            </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 flex-1 items-stretch">
+              <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-b from-[#1c1917] to-[#0c0a09] text-white p-8 flex flex-col justify-between group shadow-md border border-stone-800">
+                <div className="absolute inset-0 z-0 opacity-25 group-hover:scale-105 transition-transform duration-700">
+                  <img src="https://images.unsplash.com/photo-1541643600914-78b084683702?w=500&q=80" alt="Stats 1" className="w-full h-full object-cover" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-0" />
+                <div className="relative z-10">
+                  <span className="block font-sans text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-2">+3000</span>
+                  <h4 className="text-lg md:text-xl font-bold text-gray-200 tracking-wide mb-4">Khách hàng toàn quốc</h4>
+                  <p className="text-gray-400 text-sm md:text-base leading-relaxed font-light">
+                    Với hơn 3.000 khách hàng tin tưởng, Sudes tự hào là địa chỉ uy tín cho những ai yêu thích nước hoa chính hãng...
+                  </p>
+                </div>
+                <div className="relative z-10 mt-8">
+                  <button className="inline-flex items-center gap-4 bg-white hover:bg-gray-100 text-gray-900 font-bold text-xs tracking-wider uppercase pl-5 pr-1.5 py-1.5 rounded-full shadow-sm transition-all group/btn2">
+                    Tìm hiểu thêm
+                    <span className="w-6 h-6 rounded-full bg-[#b31f24] text-white flex items-center justify-center text-xs group-hover/btn2:translate-x-1 transition-transform">➔</span>
+                  </button>
+                </div>
+              </div>
 
-            {/* Nút điều hướng Phải (Next) */}
-            <button
-              onClick={scrollRight}
-              className="absolute -right-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#313131] shadow-[0_2px_5px_rgba(0,0,0,0.15)] opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 border border-neutral-100 hover:bg-[#6eb48c] hover:text-white"
-              aria-label="Next posts"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="h-4 w-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
-            </button>
+              <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-b from-[#2e1012] to-[#1a0507] text-white p-8 flex flex-col justify-between group shadow-md border border-rose-950/40">
+                <div className="absolute inset-0 z-0 opacity-30 group-hover:scale-105 transition-transform duration-700">
+                  <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=500&q=80" alt="Stats 2" className="w-full h-full object-cover" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/50 to-transparent z-0" />
+                <div className="relative z-10">
+                  <span className="block font-sans text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-2">+1000</span>
+                  <h4 className="text-lg md:text-xl font-bold text-gray-200 tracking-wide mb-4">Feedback tích cực</h4>
+                  <p className="text-rose-200/70 text-sm md:text-base leading-relaxed font-light">
+                    Khách hàng đã lựa chọn Sudes không chỉ vì nước hoa chính hãng, mà còn bởi sự hài lòng tuyệt đối...
+                  </p>
+                </div>
+                <div className="relative z-10 mt-8">
+                  <button className="inline-flex items-center gap-4 bg-white hover:bg-gray-100 text-gray-900 font-bold text-xs tracking-wider uppercase pl-5 pr-1.5 py-1.5 rounded-full shadow-sm transition-all group/btn3">
+                    Tìm hiểu thêm
+                    <span className="w-6 h-6 rounded-full bg-[#b31f24] text-white flex items-center justify-center text-xs group-hover/btn3:translate-x-1 transition-transform">➔</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Khung chứa danh sách bài viết cuộn mượt */}
-            <div
-              ref={sliderRef}
-              className="no-scrollbar flex gap-[30px] overflow-x-auto scroll-smooth snap-x snap-mandatory"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {listPosts.map((post) => (
-                <div
-                  key={post.id}
-                  className="w-full min-w-full sm:min-w-[calc(50%-15px)] md:min-w-[calc(33.333%-20px)] snap-start"
-                >
-                  <article className="grid grid-cols-[120px_1fr] gap-4 items-center">
-                    {/* Khung chứa ảnh vuông */}
-                    <div className="overflow-hidden bg-neutral-200 aspect-square w-[120px] h-[120px]">
+      {/* ─── 4. BRAND VALUES POLICIES BAR ─── */}
+      <section className="bg-[#b31f24] text-white py-14 border-t border-white/10 shadow-inner">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-6 text-center">
+            <div className="flex flex-col items-center gap-3 group">
+              <div className="mb-1 transition-transform duration-300 group-hover:-translate-y-1">
+                <svg className="w-9 h-9 opacity-95" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              </div>
+              <h5 className="text-sm md:text-base font-bold tracking-wider uppercase">Ship hàng nhanh chóng</h5>
+              <p className="text-white/80 text-xs md:text-sm font-light max-w-[250px] leading-relaxed">Đảm bảo sản phẩm đến tay bạn trong thời gian ngắn nhất.</p>
+            </div>
+
+            <div className="flex flex-col items-center gap-3 group">
+              <div className="mb-1 transition-transform duration-300 group-hover:-translate-y-1">
+                <svg className="w-9 h-9 opacity-95" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 15H19c0 .445-.035.882-.102 1.309m-1.921-6.666A8.002 8.002 0 005.99 11H8.5"></path></svg>
+              </div>
+              <h5 className="text-sm md:text-base font-bold tracking-wider uppercase">Chính sách đổi trả</h5>
+              <p className="text-white/80 text-xs md:text-sm font-light max-w-[250px] leading-relaxed">Hỗ trợ bạn đổi hoặc trả hàng dễ dàng trong vòng 7 ngày.</p>
+            </div>
+
+            <div className="flex flex-col items-center gap-3 group">
+              <div className="mb-1 transition-transform duration-300 group-hover:-translate-y-1">
+                <svg className="w-9 h-9 opacity-95" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+              </div>
+              <h5 className="text-sm md:text-base font-bold tracking-wider uppercase">Hỗ trợ khách hàng</h5>
+              <p className="text-white/80 text-xs md:text-sm font-light max-w-[250px] leading-relaxed">Hỗ trợ khách hàng tận tâm, sẵn sàng giải đáp mọi thắc mắc 24/7.</p>
+            </div>
+
+            <div className="flex flex-col items-center gap-3 group">
+              <div className="mb-1 transition-transform duration-300 group-hover:-translate-y-1">
+                <svg className="w-9 h-9 opacity-95" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path></svg>
+              </div>
+              <h5 className="text-sm md:text-base font-bold tracking-wider uppercase">Sản phẩm chính hãng</h5>
+              <p className="text-white/80 text-xs md:text-sm font-light max-w-[250px] leading-relaxed">Sản phẩm chính hãng 100%, cam kết về chất lượng và nguồn gốc.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 5. ASYMMETRIC CATEGORIES CAROUSEL ─── */}
+      <section className="bg-[#fcfcfc] w-full min-h-[650px] py-24 overflow-hidden select-none">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-4 flex flex-col justify-center relative z-10 min-h-[350px]">
+            <div className="absolute -top-10 -left-4 text-[90px] md:text-[120px] font-black text-gray-200/50 uppercase tracking-tighter pointer-events-none z-0 font-sans">
+              SUDES
+            </div>
+
+            <div className="relative z-10 animate-fade">
+              <p className="text-gray-800 text-sm md:text-base font-medium tracking-wide mb-2">
+                Danh mục sản phẩm
+              </p>
+              <h2 key={activeCategory.id} className="font-sans text-4xl md:text-5xl font-black text-[#b31f24] tracking-tight mb-5 uppercase leading-tight animate-slide">
+                {activeCategory.label}
+              </h2>
+              <p key={`desc-${activeCategory.id}`} className="text-gray-600 text-sm md:text-base leading-relaxed max-w-sm mb-8 font-light animate-fade">
+                {activeCategory.desc}
+              </p>
+
+              <button className="inline-flex items-center gap-5 bg-white hover:bg-gray-50 text-gray-800 font-bold text-xs tracking-wider uppercase pl-6 pr-1.5 py-1.5 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.05)] transition-all group border border-gray-100">
+                Tìm hiểu thêm
+                <span className="w-8 h-8 rounded-full bg-[#b31f24] text-white flex items-center justify-center text-sm group-hover:scale-105 transition-transform">➔</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="lg:col-span-8 flex flex-col gap-6 w-full">
+            <div className="flex items-end gap-5 w-full min-h-[480px] overflow-visible">
+              {visibleCategories.map((item, index) => {
+                const isFirstCard = index === 0;
+                return (
+                  <div
+                    key={`${item.id}-${index}`}
+                    className={`relative flex flex-col justify-between bg-[#e6e6e6] text-gray-900 rounded-[24px] p-6 transition-all duration-500 ease-out flex-shrink-0 ${isFirstCard
+                      ? "w-[44%] h-[480px] shadow-md bg-[#e2e2e2]"
+                      : "w-[26%] h-[400px] opacity-85 hidden sm:flex"
+                      }`}
+                  >
+                    <span className="absolute top-4 left-6 font-sans text-5xl md:text-6xl font-bold text-gray-400/40 tracking-tighter">
+                      {item.id}
+                    </span>
+
+                    <div className={`w-full flex items-center justify-center overflow-hidden mix-blend-multiply ${isFirstCard ? "h-[340px] mt-4" : "h-[260px] mt-6"
+                      }`}>
                       <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                        loading="lazy"
+                        src={item.img}
+                        alt={item.label}
+                        className={`object-contain transition-transform duration-500 hover:scale-105 ${isFirstCard ? "max-h-full" : "max-h-[90%]"
+                          }`}
                       />
                     </div>
 
-                    {/* Khung nội dung */}
-                    <div className="flex flex-col pr-2">
-                      <h4 className="font-serif text-[16px] font-semibold leading-[1.4] text-[#161616] line-clamp-2">
-                        <a href={postDetailPath(post.category, post)} className="hover:text-[#0497e0] transition-colors duration-200">
-                          {post.title}
-                        </a>
+                    <div className="w-full text-center pb-2">
+                      <h4 className="font-sans font-extrabold text-sm md:text-base text-[#b31f24] tracking-wide uppercase">
+                        {item.label}
                       </h4>
-
-                      {/* Meta data đúng màu và kích thước gốc */}
-                      <div className="mt-1.5 flex items-center gap-1.5 font-sans text-[13px] text-[#888888]">
-                        <span>by <span className="text-[#313131] hover:text-[#0497e0] cursor-pointer transition-colors">{post.author}</span></span>
-                        <span className="text-[#dedede]">|</span>
-                        <time datetime="2024-03-28">{post.date}</time>
-                      </div>
                     </div>
-                  </article>
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
 
-          </div>
-        </div>
-      </section>
-
-      {/* VIDEO PLAYLIST */}
-      <section className="w-full bg-[#111111] py-10">
-        <div className="mx-auto max-w-[1170px] px-4">
-
-          {/* KHUNG CHÍNH - Giới hạn chiều cao để kích hoạt scroll bên trong */}
-          <div className="flex flex-col md:flex-row bg-[#1a1a1a] h-auto md:h-[450px] shadow-2xl overflow-hidden border border-neutral-800">
-
-            {/* PHẦN VIDEO BÊN TRÁI */}
-            <div className="flex-1 bg-black relative">
-              <iframe
-                className="w-full h-full aspect-video md:aspect-auto"
-                src={activeVideo.embedUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ"}
-                allowFullScreen
-              ></iframe>
-            </div>
-
-            {/* PHẦN PLAYLIST BÊN PHẢI - Khu vực scroll */}
-            <div className="w-full md:w-[350px] flex flex-col h-[400px] md:h-full min-h-0 bg-[#1a1a1a]">
-
-              {/* Header Playlist */}
-              <div className="p-4 bg-[#1a1a1a] border-b border-neutral-800 flex justify-between items-center flex-shrink-0">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-                  PLAYLIST ({mockVideos.length} VIDEOS)
-                </span>
-                <span className="text-[10px] bg-blue-600 px-2 py-0.5 rounded font-bold">4K SERIES</span>
+            <div className="flex items-center justify-end gap-6 mt-4 w-full pr-2">
+              <div className="hidden md:block w-72 h-[1.5px] bg-gray-200 relative rounded-full overflow-hidden">
+                <div
+                  className="absolute top-0 h-full bg-[#b31f24] transition-all duration-500 rounded-full"
+                  style={{
+                    width: `${100 / CATEGORIES.length}%`,
+                    left: `${(catIndex * 100) / CATEGORIES.length}%`
+                  }}
+                />
               </div>
 
-              {/* List cuộn - Sử dụng flex-1 và overflow-y-auto */}
-              <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar divide-y divide-neutral-800">
-                {mockVideos.map((video, index) => {
-                  const isSelected = activeVideo.id === video.id;
-                  return (
-                    <div
-                      key={video.id}
-                      onClick={() => setActiveVideo(video)}
-                      className={`flex gap-3 p-3 cursor-pointer border-neutral-800 transition-colors ${isSelected ? "bg-[#252525] border-r-4 border-blue-500" : "hover:bg-[#252525]"
-                        }`}
-                    >
-                      <div className="w-20 h-12 bg-neutral-700 flex-shrink-0 relative overflow-hidden">
-                        <img src={video.thumbnail} className="w-full h-full object-cover" alt="" />
-                        <div className="absolute inset-0 bg-black/30 flex items-end p-1">
-                          <span className="text-[10px] font-bold text-white bg-black/60 px-1">{index + 1}</span>
-                        </div>
-                      </div>
-                      <div className="min-w-0 flex flex-col justify-center">
-                        <p className={`text-[12px] font-medium leading-tight line-clamp-2 ${isSelected ? "text-blue-400" : "text-neutral-200"}`}>
-                          {video.title}
-                        </p>
-                        <p className="text-[10px] text-neutral-500 mt-1">{video.duration}</p>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="flex items-center gap-2">
+                <button onClick={handleCatPrev} className="w-9 h-9 rounded-full bg-gray-200/70 hover:bg-[#b31f24] text-gray-700 hover:text-white flex items-center justify-center text-base shadow-sm transition-all font-medium">←</button>
+                <button onClick={handleCatNext} className="w-9 h-9 rounded-full bg-[#b31f24] text-white hover:bg-[#91161a] flex items-center justify-center text-base shadow-sm transition-all font-medium">→</button>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Style để thanh cuộn đẹp hơn */}
-        <style>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #1a1a1a; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
-      `}</style>
       </section>
 
-      <section className="mx-auto grid max-w-[1170px] grid-cols-1 gap-10 px-5 py-14 md:px-0 lg:grid-cols-[2fr_1fr]">
-        <div>
-          <SectionTitle>Latest Stories</SectionTitle>
+      {/* ─── 6. FEATURED PRODUCTS ─── */}
+      <section className="py-20 bg-[#fcfcfc] border-y border-gray-100">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <p className="text-[#b31f24] text-[10px] tracking-[0.5em] uppercase mb-3 font-semibold">Được yêu thích</p>
+              <h2 className="font-sans text-3xl font-bold text-gray-900">Sản phẩm nổi bật</h2>
+            </div>
+            <a href="#" className="hidden md:flex items-center gap-2 text-gray-500 hover:text-[#b31f24] text-[11px] tracking-[0.2em] uppercase transition-colors font-medium">
+              Xem tất cả <span className="text-lg">→</span>
+            </a>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {FEATURED_PRODUCTS.map(p => <ProductCard key={p.id} product={p} featured />)}
+          </div>
+        </div>
+      </section>
 
-          <div className="space-y-6">
-            {/* Dùng slice để giới hạn số bài hiện thị dựa trên state */}
-            {listPosts.slice(0, visibleCount).map((post) => (
-              <SmallPost key={post.id} post={post} />
-            ))}
+      {/* ─── 7. MEN PERFUMES PRODUCTS ─── */}
+      <section className="py-20 bg-[#fcfcfc] border-y border-gray-100">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <p className="text-[#b31f24] text-[10px] tracking-[0.5em] uppercase mb-3 font-semibold">Được yêu thích</p>
+              <h2 className="font-sans text-3xl font-bold text-gray-900">Nước hoa nam</h2>
+            </div>
+            <a href="#" className="hidden md:flex items-center gap-2 text-gray-500 hover:text-[#b31f24] text-[11px] tracking-[0.2em] uppercase transition-colors font-medium">
+              Xem tất cả <span className="text-lg">→</span>
+            </a>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {FEATURED_PRODUCTS.map(p => <ProductCard key={p.id} product={p} featured />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 8. BLOG SECTION (Đã tối ưu hóa giống hoàn toàn 100% hình ảnh) ─── */}
+      <section className="w-full bg-[#ffffff] py-20 relative select-none font-sans">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative">
+
+          {/* Cụm Tiêu Đề Chính */}
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-[32px] font-black text-[#b31f24] tracking-normal mb-2 uppercase">
+              TIP CHIA SẺ VỀ NƯỚC HOA
+            </h2>
+            <p className="text-gray-950 text-sm md:text-base font-normal">
+              Khám phá những bài viết hữu ích và xu hướng mới nhất trong Blog của chúng tôi.
+            </p>
           </div>
 
-          {/* NÚT LOAD MORE: Chỉ hiện nếu vẫn còn bài để load */}
-          {visibleCount < listPosts.length && (
-            <div className="mt-10 text-center">
-              <button
-                onClick={() => setVisibleCount(prev => prev + 3)}
-                className="border border-[#ececec] px-8 py-3 text-[12px] font-bold uppercase tracking-[0.2em] text-neutral-900 transition hover:bg-[#6eb48c] hover:text-white"
+          {/* Wrapper Slider */}
+          <div className="relative w-full group">
+
+            {/* Nút lùi slide trái - Căn đè giữa ảnh bên trái */}
+            <button
+              onClick={handleBlogPrev}
+              className="absolute -left-4 top-[32%] -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white/90 border border-gray-200 flex items-center justify-center shadow-md hover:bg-[#b31f24] hover:text-white text-gray-700 text-lg transition-all duration-300"
+            >
+              ←
+            </button>
+
+            {/* Nút tiến slide phải - Căn đè giữa ảnh bên phải */}
+            <button
+              onClick={handleBlogNext}
+              className="absolute -right-4 top-[32%] -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white/90 border border-gray-200 flex items-center justify-center shadow-md hover:bg-[#b31f24] hover:text-white text-gray-700 text-lg transition-all duration-300"
+            >
+              →
+            </button>
+
+            {/* Vùng tràn hiển thị danh sách bài viết */}
+            <div className="overflow-hidden px-1 py-2">
+              <div
+                className="flex transition-transform duration-500 ease-out gap-6"
+                style={{
+                  // Tính toán khoảng dịch chuyển dịch slide mượt mà cho 3 cột
+                  transform: `translateX(calc(-${blogIndex * (100 / 3)}% - ${blogIndex * 8}px))`
+                }}
               >
-                Load More
-              </button>
-            </div>
-          )}
-        </div>
-        <Tienich listPosts={listPosts} travelCategories={travelCategories} />
+                {BLOG_POSTS.map((post) => (
+                  <div
+                    key={post.id}
+                    // w-full cho mobile, sm:w-(50%) cho tablet, và ÉP CỨNG lg:w-[calc(33.333%-16px)] để luôn ra 3 block trên 1 hàng máy tính
+                    className="bg-[#f4f4f4] rounded-[24px] overflow-hidden flex flex-col w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-shrink-0 border border-gray-100/60"
+                  >
+                    {/* Phần Khung Ảnh bọc ngoài */}
+                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-t-[24px]">
+                      <img
+                        src={post.img}
+                        alt={post.title}
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Badge "Kiến thức nước hoa" chuẩn ảnh mẫu */}
+                      <span className="absolute top-4 left-4 bg-[#b31f24] text-white text-[11px] font-medium px-4 py-1.5 rounded-full shadow-sm">
+                        {post.badge}
+                      </span>
+                    </div>
 
+                    {/* Vùng Nội Dung Text */}
+                    <div className="p-6 flex flex-col flex-1 bg-[#f4f4f4] rounded-b-[24px]">
+                      <div>
+                        {/* Tiêu đề bài viết */}
+                        <h3 className="font-sans font-bold text-gray-900 text-base md:text-[17px] leading-snug mb-4 hover:text-[#b31f24] transition-colors line-clamp-2 min-h-[48px]">
+                          {post.title}
+                        </h3>
+
+                        {/* Cụm Meta-info Metadata: Date & Comment */}
+                        <div className="flex items-center gap-2 text-xs text-gray-800 mb-4 font-normal">
+                          <span className="flex items-center gap-1">
+                            <svg className="w-3.5 h-3.5 text-gray-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            {post.date}
+                          </span>
+                          <span className="text-gray-300 mx-1">|</span>
+                          <span className="flex items-center gap-1">
+                            <svg className="w-3.5 h-3.5 text-gray-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                            {post.comments} bình luận
+                          </span>
+                        </div>
+
+                        {/* Đoạn mô tả vắn tắt */}
+                        <p className="text-gray-700 text-xs md:text-sm leading-relaxed font-normal line-clamp-3">
+                          {post.desc}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
-    </main>
+
+      {/* ─── 9. TESTIMONIALS (Đã đổi font chữ thường và giao diện tối giản tinh tế) ─── */}
+      <section className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 bg-white">
+        <div className="text-center mb-10">
+          <p className="text-[#b31f24] text-[10px] tracking-[0.4em] uppercase mb-2 font-semibold">Đánh giá khách hàng</p>
+          <h2 className="font-sans text-3xl font-extrabold text-gray-900 uppercase">Khách hàng nói gì</h2>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6">
+          {TESTIMONIALS.map((t, i) => (
+            <div key={i} className="border border-gray-100 bg-[#f9f9f9] p-6 rounded-2xl hover:shadow-sm transition-all duration-300">
+              <StarRating stars={t.stars} />
+              <p className="text-gray-700 text-sm leading-relaxed my-4 font-normal">"{t.text}"</p>
+              <p className="text-gray-900 text-[11px] tracking-[0.1em] uppercase font-bold">— {t.name}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }

@@ -1,148 +1,95 @@
-import React, { useMemo, useState } from "react";
-import { Facebook, Instagram, Menu, Search, X, Youtube, ChevronDown } from "lucide-react";
-import { NavLink } from "react-router-dom";
-import { listPosts, travelCategories } from "../../clientPages/mockTravelData";
-import { slug } from '../../utils/constants.js';
+import React, { useState } from "react";
 
-export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }) {
-  const [query, setQuery] = useState("");
+const NAV_LINKS = ["Trang chủ", "Giới thiệu", "Bộ sưu tập" , "Blog", "Liên hệ"];
 
-  const menuItems = [
-    { label: "Home", path: "/trang-chu" },
-    { label: "About", path: "/gioi-thieu" },
-    {
-      label: "Inspiration",
-      path: "/tin-tuc",
-      subMenu: travelCategories.map((category) => ({
-        label: category,
-        path: `/tin-tuc/${slug(category)}`
-      }))
-    },
-    { label: "Contact", path: "/lien-he" },
-  ];
-
-  const suggestions = useMemo(() => {
-    if (!query.trim()) return [];
-    return listPosts
-      .filter((post) => post.title.toLowerCase().includes(query.trim().toLowerCase()))
-      .slice(0, 4);
-  }, [query]);
+export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm">
-      {/* Top Bar */}
-      <div className="border-b border-[#ececec]">
-        <div className="mx-auto grid max-w-[1170px] grid-cols-[44px_1fr_44px] items-center gap-3 px-5 py-5 md:grid-cols-[220px_1fr_220px] md:px-0 md:py-7">
-          <div className="hidden items-center gap-3 text-neutral-900 md:flex">
-            <a href="#" className="transition hover:text-[#6eb48c]"><Facebook className="h-4 w-4" /></a>
-            <a href="#" className="transition hover:text-[#6eb48c]"><Instagram className="h-4 w-4" /></a>
-            <a href="#" className="transition hover:text-[#6eb48c]"><Youtube className="h-4 w-4" /></a>
-          </div>
-
-          <button onClick={() => setIsMobileMenuOpen(true)} className="md:hidden"><Menu /></button>
-
-          <NavLink to="/trang-chu" className="text-center">
-            <span className="block font-serif text-[42px] font-semibold leading-none text-neutral-950 md:text-[64px]">Soledad</span>
-            <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.34em] text-neutral-500">Travel Magazine</span>
-          </NavLink>
-
-          <div className="hidden md:block justify-self-end w-[220px]">
-            <input
-              className="h-9 w-full border border-[#ececec] pl-4 text-[13px] outline-none focus:border-[#6eb48c]"
-              placeholder="Search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-        </div>
+    <>
+      {/* ─── Announcement Bar (Giữ nguyên hoặc tùy biến theo tone đỏ) ─── */}
+      <div className="bg-[#b31f24] text-white text-center text-[11px] tracking-[0.25em] uppercase py-2 font-medium font-body relative z-[60]">
+        &nbsp;·&nbsp; Hàng chính hãng 100% &nbsp;·&nbsp; 0967273063 &nbsp;·&nbsp; Giao hàng toàn quốc &nbsp;·&nbsp;
       </div>
 
-      {/* Main Navigation (Desktop Menu) */}
-      <nav className="hidden border-b border-[#ececec] md:block">
-        <div className="mx-auto flex max-w-[1170px] justify-center">
-          {menuItems.map((item) => (
-            <div key={item.label} className="group relative">
-              <NavLink 
-                to={item.path} 
-                className={({ isActive }) => 
-                  `flex items-center gap-1 px-[18px] py-[18px] text-[12px] font-bold uppercase transition-colors ${
-                    isActive ? "text-[#6eb48c]" : "text-neutral-800 hover:text-[#6eb48c]"
-                  }`
-                }
-              >
-                {item.label}
-                {item.subMenu && <ChevronDown className="h-3 w-3" />}
-              </NavLink>
+      {/* ─── Navbar Nền Trắng Cố Định ─── */}
+      <header className="sticky top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm transition-all duration-300">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex items-center justify-between h-20">
 
-              {item.subMenu && (
-                <div className="absolute left-0 top-full hidden min-w-[200px] bg-white shadow-xl group-hover:block z-50 border border-neutral-100">
-                  {item.subMenu.map((sub) => (
-                    <NavLink 
-                      key={sub.label} 
-                      to={sub.path} 
-                      className={({ isActive }) =>
-                        `block px-6 py-3 text-[12px] font-bold uppercase border-b border-neutral-100 transition-colors ${
-                          isActive ? "text-[#6eb48c] bg-neutral-50" : "text-neutral-800 hover:text-[#6eb48c] hover:bg-neutral-50"
-                        }`
-                      }
-                    >
-                      {sub.label}
-                    </NavLink>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </nav>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[100] bg-black/50 md:hidden" onClick={() => setIsMobileMenuOpen(false)}>
-          <div className="ml-auto h-full w-[300px] bg-white p-6 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-end mb-4">
-              <button onClick={() => setIsMobileMenuOpen(false)}><X className="h-6 w-6 text-neutral-800" /></button>
-            </div>
-            
-            <nav className="space-y-4">
-              {menuItems.map((item) => (
-                <div key={item.label} className="space-y-2">
-                  <NavLink 
-                    to={item.path} 
-                    onClick={() => setIsMobileMenuOpen(false)} 
-                    className={({ isActive }) => 
-                      `block py-1 font-bold uppercase transition-colors ${
-                        isActive ? "text-[#6eb48c]" : "text-neutral-900"
-                      }`
-                    }
-                  >
-                    {item.label}
-                  </NavLink>
-                  
-                  {item.subMenu && (
-                    <div className="pl-4 space-y-2 border-l border-neutral-200">
-                      {item.subMenu.map((sub) => (
-                        <NavLink 
-                          key={sub.label} 
-                          to={sub.path} 
-                          onClick={() => setIsMobileMenuOpen(false)} 
-                          className={({ isActive }) => 
-                            `block text-xs font-semibold uppercase transition-colors ${
-                              isActive ? "text-[#6eb48c]" : "text-neutral-500"
-                            }`
-                          }
-                        >
-                          {sub.label}
-                        </NavLink>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </nav>
+          <div className="flex-1">
+            <h1 className="font-display text-2xl text-[#b31f24] tracking-[0.3em] uppercase font-bold">Sudes</h1>
+            <p className="text-gray-400 text-[8px] tracking-[0.4em] uppercase -mt-0.5">Perfume & Luxury</p>
           </div>
+
+          {/* 2. Desktop Nav (Chuyển sang chữ tối màu) */}
+          <nav className="hidden md:flex items-center gap-8">
+            {NAV_LINKS.map((link, idx) => (
+              <a
+                key={link}
+                href="#"
+                className={`text-gray-800 hover:text-[#b31f24] text-[12px] tracking-[0.15em] uppercase transition-colors duration-200 relative group font-body font-medium ${idx === 0 ? "text-[#b31f24]" : ""}`}
+              >
+                {link}
+                <span className={`absolute -bottom-1 left-0 h-[2px] bg-[#b31f24] transition-all duration-300 ${idx === 0 ? "w-full" : "w-0 group-hover:w-full"}`} />
+              </a>
+            ))}
+          </nav>
+
+          {/* 3. Cụm Chức Năng Theo Ảnh image_8456ec.png */}
+          <div className="flex-1 flex items-center justify-end">
+
+            {/* Khung chức năng bo góc màu đỏ */}
+            <div className="flex items-center gap-6 px-5 py-2.5 border border-[#b31f24] rounded-full bg-white text-[#b31f24]">
+
+              {/* Icon Tìm kiếm */}
+              <button className="hover:scale-105 transition-transform" title="Tìm kiếm">
+                <svg className="w-5 h-5 stroke-current" fill="none" strokeWidth={2} viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+              </button>
+
+              {/* Icon Tài khoản */}
+              <button className="hover:scale-105 transition-transform" title="Tài khoản">
+                <svg className="w-5 h-5 stroke-current" fill="none" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+              </button>
+
+              {/* Icon Giỏ hàng kèm Badge số 0 đỏ đậm */}
+              <button className="relative hover:scale-105 transition-transform" title="Giỏ hàng">
+                <svg className="w-5 h-5 stroke-current" fill="none" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                </svg>
+                {/* Badge tròn đỏ chứa số 0 */}
+                <span className="absolute -top-2.5 -right-2.5 w-4.5 h-4.5 bg-[#b31f24] rounded-full text-white text-[10px] flex items-center justify-center font-bold border border-white">
+                  0
+                </span>
+              </button>
+
+            </div>
+
+            {/* Nút Menu Mobile (chỉ hiện trên màn hình nhỏ) */}
+            <button className="md:hidden text-gray-800 ml-4" onClick={() => setMenuOpen(!menuOpen)}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
+          </div>
+
         </div>
-      )}
-    </header>
+
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4 shadow-inner">
+            {NAV_LINKS.map(link => (
+              <a key={link} href="#" className="text-gray-800 hover:text-[#b31f24] text-[12px] tracking-[0.15em] uppercase font-medium">{link}</a>
+            ))}
+          </div>
+        )}
+      </header>
+    </>
   );
 }
