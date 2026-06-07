@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { slug } from '../../utils/constants'
 
 /**
  * Component hiển thị thẻ sản phẩm nước hoa (Product Card)
@@ -16,12 +18,11 @@ import React, { useState } from "react";
  */
 export default function ProductCard({ product, featured = false }) {
   const [hovered, setHovered] = useState(false);
+  const navigate = useNavigate();
 
-  // Xử lý sự kiện click thêm vào giỏ hàng
-  const handleAddToCart = (e) => {
-    e.stopPropagation(); // Ngăn sự kiện nổi bọt nếu sau này bạn bọc link chi tiết sản phẩm ở ngoài
-    // Logic thêm vào giỏ hàng của bạn ở đây (ví dụ: gọi context, dispatch redux...)
-    console.log(`Đã thêm sản phẩm ${product.name} vào giỏ hàng`);
+  const handleOpenDetail = (e) => {
+    e.stopPropagation();
+    navigate(`/san-pham/${slug(product.name)}/${product.id}`);
   };
 
   return (
@@ -67,7 +68,7 @@ export default function ProductCard({ product, featured = false }) {
             }`}
         >
           <button
-            onClick={handleAddToCart}
+            onClick={handleOpenDetail}
             className="w-full bg-[#b31f24] hover:bg-[#91161a] text-white text-xs tracking-[0.15em] uppercase font-semibold py-2.5 transition-colors duration-200 rounded-sm shadow-sm cursor-pointer"
           >
             Tùy Chọn
@@ -93,11 +94,11 @@ export default function ProductCard({ product, featured = false }) {
             {product.note}
           </p>
         ) : (
-          <div className="h-[29px]" /> // Giữ khoảng trống đồng đều nếu sản phẩm không có dòng ghi chú mùi hương
+          <div className="h-[29px]" />
         )}
 
         {/* Giá tiền & Dung tích */}
-        <div className="flex items-center justify-between tức thời">
+        <div className="flex items-center justify-between">
           <span className="text-[#b31f24] font-medium text-base tracking-wide">
             {product.price}₫
           </span>

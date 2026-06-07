@@ -46,6 +46,7 @@ import ChinhSach3 from '../components/chinhsach/Chinhsach3.jsx'
 import ChinhSach4 from '../components/chinhsach/Chinhsach4.jsx'
 
 import A from "../clientPages/payment/ProductDetail_test";
+import DetailSanPham from "../components/sanpham/DetailSanPham.jsx";
 
 const ProtectedRoute = ({ children }) => {
   const { userInfo, isLoading } = useSelector((state) => state.auth);
@@ -110,6 +111,7 @@ function RouterRoot() {
           {/* <Route path="/:name/:id_category/:id_product" element={<ProductPageHandler />} /> */}
           <Route path="dich-vu" element={<Service />} />
           <Route path="san-pham" element={<DanhSachSanPham />} />
+          <Route path="san-pham/:name/:id" element={<DetailSanPham />} />
           <Route path="dich-vu/set-up-phong-livestream" element={<ServiceLive />} />
           <Route path="dich-vu/phan-mem-auto-tone" element={<ServiceTone />} />
 

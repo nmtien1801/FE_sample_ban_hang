@@ -100,7 +100,11 @@ export const HERO_PRODUCTS = [
     note: "Gỗ đàn hương · Hoa nhài · Xạ hương",
     price: "2.850.000",
     badge: "Best Seller",
-    img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    img: [
+      "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+      "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+      "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    ],
     size: "100ml",
     subTitle: "Perfume & Cologne\nLong Lasting\nWomen's Perfumes",
     tagLine: "BST NƯỚC HOA FORMAT MADE IN FRANCE TRỞ LẠI",
@@ -112,7 +116,11 @@ export const HERO_PRODUCTS = [
     note: "Oud · Hổ phách · Hoa hồng",
     price: "3.450.000",
     badge: "New Arrival",
-    img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    img: [
+      "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+      "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+      "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    ],
     size: "75ml",
     subTitle: "Velvet Oud Luxury\nIntense Scent\nUnisex Collection",
     tagLine: "HƯƠNG THƠM ĐẲNG CẤP TỪ TRUNG ĐÔNG",
@@ -124,10 +132,65 @@ export const HERO_PRODUCTS = [
     note: "Cam bergamot · Iris · Cèdre",
     price: "1.950.000",
     badge: "Trending",
-    img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    img: [
+      "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+      "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+      "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80",
+    ],
     size: "50ml",
     subTitle: "Eau de Lumière\nFresh & Elegant\nDaily Fragrance",
     tagLine: "SỰ TƯƠI MÁT TINH TẾ CHO NGÀY MỚI",
+  },
+];
+
+export const FEATURED_PRODUCTS = [
+  {
+    id: 4,
+    name: "Midnight Rose",
+    brand: "Sudes",
+    price: "1.650.000",
+    img: [
+      "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&q=80",
+      "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&q=80",
+      "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&q=80",
+    ],
+    tag: "Mới",
+  },
+  {
+    id: 5,
+    name: "Golden Iris",
+    brand: "Maison",
+    price: "2.100.000",
+    img: [
+      "https://images.unsplash.com/photo-1566977776052-6e61e35bf9be?w=400&q=80",
+      "https://images.unsplash.com/photo-1566977776052-6e61e35bf9be?w=400&q=80",
+      "https://images.unsplash.com/photo-1566977776052-6e61e35bf9be?w=400&q=80",
+    ],
+    tag: "Hot",
+  },
+  {
+    id: 6,
+    name: "Santal Blanc",
+    brand: "Sudes Noir",
+    price: "2.750.000",
+    img: [
+      "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&q=80",
+      "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&q=80",
+      "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&q=80",
+    ],
+    tag: "Sale",
+  },
+  {
+    id: 7,
+    name: "Amber Mystique",
+    brand: "Blanc & Or",
+    price: "1.850.000",
+    img: [
+      "https://images.unsplash.com/photo-1557170334-a9632e77c6e4?w=400&q=80",
+      "https://images.unsplash.com/photo-1557170334-a9632e77c6e4?w=400&q=80",
+      "https://images.unsplash.com/photo-1557170334-a9632e77c6e4?w=400&q=80",
+    ],
+    tag: "Mới",
   },
 ];
 
@@ -166,41 +229,6 @@ export const CATEGORIES = [
     count: "24 bộ quà",
     desc: "Hộp quà tặng sang trọng, tinh tế tích hợp nhiều tầng hương. Lựa chọn lý tưởng để gửi gắm tâm tình cho người thương.",
     img: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&q=80",
-  },
-];
-
-export const FEATURED_PRODUCTS = [
-  {
-    id: 4,
-    name: "Midnight Rose",
-    brand: "Sudes",
-    price: "1.650.000",
-    img: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&q=80",
-    tag: "Mới",
-  },
-  {
-    id: 5,
-    name: "Golden Iris",
-    brand: "Maison",
-    price: "2.100.000",
-    img: "https://images.unsplash.com/photo-1566977776052-6e61e35bf9be?w=400&q=80",
-    tag: "Hot",
-  },
-  {
-    id: 6,
-    name: "Santal Blanc",
-    brand: "Sudes Noir",
-    price: "2.750.000",
-    img: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&q=80",
-    tag: "Sale",
-  },
-  {
-    id: 7,
-    name: "Amber Mystique",
-    brand: "Blanc & Or",
-    price: "1.850.000",
-    img: "https://images.unsplash.com/photo-1557170334-a9632e77c6e4?w=400&q=80",
-    tag: "Mới",
   },
 ];
 
